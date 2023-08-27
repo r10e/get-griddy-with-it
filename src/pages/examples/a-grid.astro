@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'A Grid';
+export const number = '03';
+export const abstract = `A grid to play around with in the browser's devtools`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			Here's a grid! It's defined like this (plus a background-color per child
+			to look prettier, and a border around the children to help visualization):
+		</p>
+		<pre>.grid-container {'{'}
+	display: grid;
+	gap: 10px;
+	grid-auto-flow: row;
+	grid-auto-rows: 50px;
+	grid-template-columns: 100px 50% 100px;
+{'}'}</pre>
+		<p>What happens here?</p>
+		<ul>
+			<li>
+				<code>display: grid;</code> tells the browser that we are, indeed, using
+				grid.
+			</li>
+			<li>
+				<code>gap: 10px;</code> creates the gap between elements. <ul>
+					<li>
+						(This can be split into
+						<code>row-gap</code> and <code>column-gap</code>, but here we simply
+						set both at once.)
+					</li>
+				</ul>
+			</li>
+			<li>
+				<code>grid-auto-flow: row;</code> tells us that we're flowing in a 'row direction'.
+				This is the default and I've been using it in 99% of cases. We won't be changing
+				it here.
+			</li>
+			<li>
+				<code>grid-auto-rows: 50px;</code> sets a size for
+				<em>implicit</em> row tracks, i.e. tracks that are being added automatically
+				because we need to place children somewhere and don't have an explicit track
+				for them.
+			</li>
+			<li>
+				<code>grid-template-columns: 100px 50% 100px;</code> defines
+				<em>explicit</em> column tracks, i.e. each row has one column with 100px
+				width, one with 50%, and then another one with 100px.
+			</li>
+		</ul>
+		<div class="grid-container">
+			<div style="background-color: blue;"></div>
+			<div style="background-color: red;"></div>
+			<div style="background-color: darkturquoise;"></div>
+			<div style="background-color: forestgreen;"></div>
+			<div style="background-color: hotpink;"></div>
+			<div style="background-color: lightgoldenrodyellow;"></div>
+			<div style="background-color: lavenderblush;"></div>
+			<div style="background-color: mediumaquamarine;"></div>
+			<div style="background-color: mediumorchid;"></div>
+			<div style="background-color: mediumvioletred;"></div>
+			<div style="background-color: mediumspringgreen;"></div>
+			<div style="background-color: tan;"></div>
+			<div style="background-color: steelblue;"></div>
+			<div style="background-color: red;"></div>
+			<div style="background-color: hotpink;"></div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		grid-auto-flow: row;
+		grid-auto-rows: 50px;
+		grid-template-columns: 100px 50% 100px;
+	}
+	.grid-container > * {
+		border: 1px solid black;
+	}
+	li {
+		margin-bottom: 1rem;
+	}
+</style>

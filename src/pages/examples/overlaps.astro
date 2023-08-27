@@ -1,0 +1,73 @@
+---
+import HeartIcon from '../../components/HeartIcon.vue';
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Overlaps';
+export const number = '10';
+export const abstract = `An example where overlaps on a single-cell grid are useful.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			Here, we show two hearts with an animation, e.g. on a
+			<em>favourite</em> button:
+		</p>
+		<div class="two-columns">
+			<pre>.heart-container {'{'}
+	display: grid;
+	grid-template: '❤️';
+	place-items: center;
+{'}'}
+
+.heart-container &gt; * {'{'}
+ 	grid-area: ❤️;
+{'}'}
+</pre>
+			<pre>&lt;div class="heart-container"&gt;
+	&lt;div onClick="showYellowHeart()"&gt;🖤&lt;/div&gt;
+	&lt;div onClick="hideYellowHeart()"&gt;💛&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+		</div>
+		<p>(Not including the animations and some sizing properties.)</p>
+		<HeartIcon client:visible />
+		<p>
+			Which of the hearts is being shown is managed by their order in the DOM:
+			The yellow heart is last, so it takes priority.
+		</p>
+	</main>
+</Layout>
+
+<style>
+	.two-columns {
+		display: grid;
+		gap: 2rem;
+		grid-template-columns: repeat(2, 1fr);
+	}
+</style>

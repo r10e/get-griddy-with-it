@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Repeat, Justify, Align';
+export const number = '06';
+export const abstract = `A neat shorthand and how to place items`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			Instead of repeating the same column size, we can write:
+			<code>grid-template-columns: repeat(3, 200px);</code>.
+		</p>
+		<p>
+			If the grid items are smaller than their cells, we can tell the grid how
+			to place the items in its cells with
+			<code>justify-items</code> and <code>align-items</code>.
+		</p>
+		<p>
+			Each item can use <code>justify-self</code> and <code>align-self</code> for
+			itself as well.
+		</p>
+		<p>
+			A grid automatically uses all width it's given, but we can tell it how to
+			use that space with
+			<code>justify-content</code>.
+		</p><p>
+			<code>align-content</code> works analoguously for vertical alignment.
+		</p>
+		<p>Once again, let's try this out in the dev tools!</p>
+		<div class="grid-container demo">
+			<div style="background-color: red;">The red tile</div>
+			<div style="background-color: green;">The green tile</div>
+			<div style="background-color: blue;">The blue tile</div>
+		</div>
+		<p>(Each of the children has a width and height of 100px.)</p>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		grid-template-columns: repeat(3, 200px);
+		grid-auto-rows: 200px;
+		background-color: lightblue;
+	}
+	.grid-container.demo {
+		justify-items: start;
+		align-items: start;
+		justify-content: start;
+	}
+	.grid-container > * {
+		display: grid;
+		place-content: center;
+		width: 100px;
+		height: 100px;
+		color: white;
+		border: 1px solid black;
+		padding: 0.5rem;
+	}
+</style>

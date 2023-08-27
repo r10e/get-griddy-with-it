@@ -1,0 +1,137 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Sizes';
+export const number = '04';
+export const abstract = `We have all normal css sizes plus some!`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			We've already seen pixel and percent sizing, but here are a few other ways
+			we can define the size grid tracks:
+		</p><ul>
+			<li>
+				<code>px</code>, <code>%</code>, <code>em</code>, <code>rem</code>,
+				<code>ch</code>, <code>lh</code>, and any other size dimension we know
+				and are familiar with in CSS.
+			</li>
+			<li><code>auto</code>: The automatic size; leave it to the browser.</li>
+			<li>
+				<code>fr</code>: A fractional unit. "The space that's being available is
+				being allocated in ratio of the fractional unit."
+			</li>
+			<li>
+				<code>min-content</code>: The content's minimum size.
+			</li>
+			<li>
+				<code>max-content</code>: The content's maximum size.
+			</li>
+			<li>
+				<code>minmax(A, B)</code>: A dynamic size that's at least A and at most
+				B.
+			</li>
+			<li>
+				<code>fit-content(VALUE)</code>: Dynamic value according to the formula
+				<code>min(maximum size, max(minimum size, VALUE))</code>.
+			</li>
+		</ul>
+
+		<div style="height: 45vh;"></div>
+
+		<p>An example for fractional units:</p>
+		<div class="grid1"><div>1fr</div><div>2fr</div><div>1fr</div></div>
+
+		<p>
+			An example for min-content and max-content (with padding, for legibility):
+		</p>
+		<div class="grid2">
+			<div>
+				<span>This column is set to <code>min-content</code>.</span>
+			</div>
+			<div><span>This column is set to <code>max-content</code>!</span></div>
+			<div>
+				<span
+					>This one is set to <code>fit-content(50ch)</code>. See that this one
+					is dynamic!</span
+				>
+			</div>
+		</div>
+
+		<div style="height: 45vh;"></div>
+
+		<p>A few things are noteworthy here:</p><ul>
+			<li>
+				When you'd usually use percents, you want to use fractionals instead, as
+				they take gaps into account!
+			</li>
+			<li>
+				<code>1fr</code> is equivalent to <code>minmax(auto, 1fr)</code>; i.e.
+				it's complicated. Sizing could be a talk of its own...
+			</li>
+			<li>
+				The keyword <code>fit-content</code> (which is <em>not</em> a function) doesn't
+				work in Grid.
+			</li>
+			<li>
+				The function <code>fit-content(VALUE)</code>
+				apparently actually expands to something like:<br />
+				<code
+					>min(min(max-content,available-size), max(min-content, VALUE))</code
+				>.<br />It's... complicated.
+			</li>
+		</ul>
+		<div style="height: 15vh;"></div>
+	</main>
+</Layout>
+
+<style>
+	.grid1 {
+		display: grid;
+		gap: 10px;
+		grid-template-columns: 1fr 2fr 1fr;
+		background-color: lightblue;
+	}
+	.grid2 {
+		display: grid;
+		gap: 10px;
+		grid-template-columns: min-content max-content fit-content(50ch);
+		background-color: lightblue;
+	}
+	.grid1 > *,
+	.grid2 > * {
+		border: 1px solid black;
+		display: grid;
+		place-content: center;
+		padding: 1rem;
+	}
+	ul > li {
+		margin-bottom: 1rem;
+	}
+</style>

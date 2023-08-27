@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'What is a Grid?';
+export const number = '02';
+export const abstract = `What is CSS Grid? Plus basic terminology.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			CSS Grid is a <em>two-dimensional</em> layout system in CSS that's
+			<em>grid-based</em>.
+		</p>
+		<p>
+			A <strong>grid</strong> is defined on the grid
+			<strong>container</strong>
+			(via
+			<code>display: grid;</code>) and consists of vertical or horizontal
+			<strong>lines</strong> that demark
+			<strong>tracks</strong>, which can be thought of as
+			<strong>columns</strong> or
+			<strong>rows</strong>, respectively.
+		</p>
+		<p>
+			Lines are numbered, with the index starting at 1. We can also count
+			backwards, starting with -1.
+		</p>
+		<p>
+			Any direct child of the container is a <strong>grid item</strong>
+			and is being placed into an
+			<strong>area</strong>, which is the intersection of any number of adjacent
+			rows or columns.
+		</p>
+		<p>
+			A <strong>cell</strong> is the intersection of
+			<em>exactly one</em> row and column, each.
+		</p>
+		<img src="/img/grid.jpg" />
+	</main>
+</Layout>
+
+<style>
+	img {
+		max-width: 100%;
+	}
+</style>

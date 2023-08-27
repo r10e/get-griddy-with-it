@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Super Center';
+export const number = '07';
+export const abstract = `Centering something has never been easier!`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			Having seen
+			<code>justify-items</code> and <code>align-items</code>, we can also use
+			<code>place-items</code> as a shorthand for both.
+		</p>
+		<p>
+			(<code>place-content</code> works analoguously.)
+		</p>
+		<p>
+			Here's the earlier grid with only one child, and
+			<code>place-items: center;</code> (and fixed height):
+		</p><div class="grid-container">
+			<div style="background-color: red;">The only child tile</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		place-items: center;
+		height: 200px;
+		background-color: lightblue;
+	}
+	.grid-container > * {
+		display: grid;
+		place-content: center;
+		width: 100px;
+		height: 100px;
+		color: white;
+		border: 1px solid black;
+		padding: 0.5rem;
+	}
+</style>

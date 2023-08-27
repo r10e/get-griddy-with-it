@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'RAM Layout';
+export const number = '08';
+export const abstract = `An easy way to a responsive layout.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			The <bold>RAM Layout</bold>, coined (to my knowledge) by Una Kravets, is a
+			very simple way to get a responsive card design:
+		</p>
+		<pre>.grid-container {'{'}
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	grid-auto-rows: 100px;
+{'}'}
+</pre>
+		<p>
+			<code>auto-fit</code> fits whatever columns there are into the available space,
+			but prefers expanding columns to adding empty ones.
+		</p>
+		<p>
+			There's also <code>auto-fill</code> which does pretty much the same, but it
+			crams
+			<em>as many columns as possible</em> into a row, even empty ones. You'll want
+			auto-fit nearly all of the time.
+		</p>
+		<div class="grid-container">
+			<div style="background-color: blue;"></div>
+			<div style="background-color: red;"></div>
+			<div style="background-color: darkturquoise;"></div>
+			<div style="background-color: forestgreen;"></div>
+			<div style="background-color: hotpink;"></div>
+			<div style="background-color: lightgoldenrodyellow;"></div>
+			<div style="background-color: lavenderblush;"></div>
+			<div style="background-color: mediumaquamarine;"></div>
+			<div style="background-color: mediumorchid;"></div>
+			<div style="background-color: mediumvioletred;"></div>
+			<div style="background-color: mediumspringgreen;"></div>
+			<div style="background-color: tan;"></div>
+			<div style="background-color: steelblue;"></div>
+			<div style="background-color: red;"></div>
+			<div style="background-color: hotpink;"></div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		grid-auto-rows: 100px;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	}
+	.grid-container > * {
+		border: 1px solid black;
+	}
+</style>

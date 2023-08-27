@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Named Areas';
+export const number = '09';
+export const abstract = `Define your whole page with one CSS property!`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			Just like we can name column and row lines, we can name complete areas as
+			well!
+		</p>
+		<p>
+			<code>grid-template</code> is a shorthand that can be used for this purpose
+			and define their sizes all at once!
+		</p>
+		<p>
+			A grid item can be placed in any named area with the property
+			<code>grid-area: AREA-NAME;</code>.
+		</p>
+		<p>Most valid unicode strings are valid area names.</p>
+		<p>
+			This especially means that we can use
+			<em>emoji</em> to, in a way, paint a picture of our target grid!
+		</p>
+		<pre>.grid-container {'{'}
+		display: grid;
+		gap: 10px;
+		grid-template:
+			'🤯 🤯 ➡️' 100px
+			'⬅️ 📄 ➡️' minmax(500px, 1fr)
+			'⬅️ 🦶 🦶' 100px
+			/ 200px 1fr 200px;
+{'}'}
+</pre>
+		<p>
+			Here, the sizes behind each line defines the row track size. The sizes in
+			the last line, after the slash, define the sizes for column tracks!
+		</p>
+		<div class="grid-container">
+			<div class="header">
+				Header: <code>grid-area: 🤯;</code>
+			</div>
+			<div class="left-sidebar">
+				Left Sidebar: <code>grid-area: ⬅️;</code>
+			</div>
+			<div class="right-sidebar">
+				Right Sidebar: <code>grid-area: ➡️;</code>
+			</div>
+			<div class="content">
+				Main content: <code>grid-area: 📄;</code>
+			</div>
+			<div class="footer">
+				Footer: <code>grid-area: 🦶;</code>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		grid-template:
+			'🤯 🤯 ➡️' 100px
+			'⬅️ 📄 ➡️' minmax(500px, 1fr)
+			'⬅️ 🦶 🦶' 100px
+			/ 200px 1fr 200px;
+	}
+	.grid-container > * {
+		border: 1px solid black;
+	}
+	.header {
+		grid-area: 🤯;
+		background-color: darkblue;
+	}
+	.left-sidebar {
+		grid-area: ⬅️;
+		background-color: darkred;
+	}
+	.right-sidebar {
+		grid-area: ➡️;
+		background-color: darkgoldenrod;
+	}
+	.content {
+		grid-area: 📄;
+		background-color: darkviolet;
+	}
+	.footer {
+		grid-area: 🦶;
+		background-color: forestgreen;
+	}
+	.grid-container > * {
+		display: grid;
+		place-items: center;
+		place-content: center;
+		color: white;
+	}
+</style>

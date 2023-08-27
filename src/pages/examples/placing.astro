@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Placing Grid Items';
+export const number = '05';
+export const abstract = `There are plenty of ways to place grid items.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>This is the grid we've seen before, but defined like this:</p>
+		<pre>.grid-container {'{'}
+	...
+	grid-template-columns: [row-start] 1fr [big-start] 2fr [big-end] 1fr [row-end];
+	...
+{'}'}</pre>
+		<p>
+			The strings in brackets are <em>naming</em> our vertical grid lines, i.e. they
+			have the following names corresponding to the lines. (Remember that we start
+			counting at 1!)
+		</p>
+		<ol>
+			<li>row-start</li>
+			<li>big-start</li>
+			<li>big-end</li>
+			<li>row-end</li>
+		</ol>
+		<div class="grid-container">
+			<div style="background-color: blue;">blue</div>
+			<div style="background-color: red;">red</div>
+			<div style="background-color: darkturquoise;">darkturquoise</div>
+			<div style="background-color: forestgreen;">forestgreen</div>
+			<div style="background-color: hotpink;">hotpink</div>
+			<div style="background-color: lightgoldenrodyellow;">
+				lightgoldenrodyellow
+			</div>
+			<div style="background-color: lavenderblush;">lavenderblush</div>
+			<div style="background-color: mediumaquamarine;">mediumaquamarine</div>
+			<div style="background-color: mediumorchid;">mediumorchid</div>
+			<div style="background-color: mediumvioletred;">mediumvioletred</div>
+			<div style="background-color: mediumspringgreen;">mediumspringgreen</div>
+			<div style="background-color: tan;">tan</div>
+			<div style="background-color: steelblue;">steelblue</div>
+			<div style="background-color: red;">red</div>
+			<div style="background-color: hotpink;">hotpink</div>
+		</div>
+		<div style="height: 10vh;"></div>
+		<p>
+			Usually, the items are placed corresponding to the auto-flow. But we can
+			use any of the following properties on the children to place them:
+		</p>
+		<ul>
+			<li>
+				<code>grid-column-start: A</code>,
+				<code>grid-column-end: B</code> or the shorhand
+				<code>grid-column: A / B</code>, where A and B are numbers or named
+				lines.
+			</li>
+			<li>
+				<code>grid-column: A / span X;</code> or
+				<code>grid-column: span X;</code>, where A is the column-start and X is
+				the number of columns the item should span.
+			</li>
+			<li>The analogue of all of the above using <code>grid-row</code>.</li>
+			<li>
+				<code>grid-area: R / A / S / B;</code>
+				which is shorthand for
+				<code>grid-row: R / S;</code> and
+				<code>grid-column: A / B;</code>
+				at once. (This can't define span though!)
+			</li>
+		</ul>
+		<p>
+			Let's try this out in the browser dev tools! Tell me where you want things
+			to be placed!
+		</p>
+		<div style="height: 15vh;"></div>
+		<p>
+			We can have overlapping grid elements and empty cells! The latter can be
+			avoided by setting
+			<code>grid-auto-flow: dense;</code>, but it's not recommended as then the
+			visual order of elements will likely differ from the DOM order.
+		</p>
+	</main>
+</Layout>
+
+<style>
+	.grid-container {
+		display: grid;
+		gap: 10px;
+		grid-auto-flow: row;
+		grid-auto-rows: 50px;
+	        grid-template-columns: [row-start] 1fr [big-start] 2fr [big-end] 1fr [row-end];
+	}
+	.grid-container > * {
+		text-align: center;
+		padding-top: 10px;
+		color: hsl(205, 94%, 33%);
+		border: 1px solid black;
+	}
+	ul {
+		display: grid;
+		gap: 1rem;
+	}
+</style>

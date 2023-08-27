@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Thank You for Listening!';
+export const number = '11';
+export const abstract = `Thanks a lot! Here are my sources.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>Thank you for your time!</p>
+		<p>Here are the sources I used:</p>
+		<ul>
+			<li>
+				<a href="https://css-tricks.com/snippets/css/complete-guide-grid/"
+					>Chris House: A Complete Guide to CSS Grid</a
+				>
+			</li>
+			<li>
+				<a href="https://thecsspodcast.libsyn.com/011-grid"
+					>Una Kravets and Adam Argyle, The CSS Podcast: Grid</a
+				>
+			</li>
+			<li>
+				<a href="https://web.dev/one-line-layouts/"
+					>Una Kravets: 10 modern layouts in one line of CSS
+				</a>
+			</li>
+			<li>
+				<a
+					href="https://www.quirksmode.org/blog/archives/2021/04/fitcontent_and.html"
+				>
+					Peter-Paul Koch: fit-content and fit-content()</a
+				>, and the
+				<a
+					href="https://developer.mozilla.org/en-US/docs/Web/CSS/fit-content_function"
+					>MDN Web Docs for fit-content()</a
+				>.
+			</li>
+		</ul>
+	</main>
+</Layout>
+
+<style></style>
